@@ -52,13 +52,13 @@ export const getUser = async (req, res) => {
 //Funcion para crear el correo
 const generarEmailDesdeNombre = (nombreCompleto, nombreTenant) => {
     const partes = nombreCompleto.trim().split(/\s+/);
-    let tenantLimpio = nombreTenant.trim().toLowerCase().replace(/\s+/g, '');
+    let tenantLimpio = nombreTenant.trim().toLowerCase().replace(/\s+/g, '-');
     if (partes.length === 1) {
         return `${partes[0].toLowerCase()}@${tenantLimpio}.com`;
     }
     const primerNombre = partes[0].toLowerCase();
     const iniciales = partes.slice(1).map(p => p[0].toLowerCase()).join("");
-    return `${primerNombre}${iniciales}@${nombreTenant.toLowerCase()}.com`;
+    return `${primerNombre}${iniciales}@${tenantLimpio}.com`;
 };
 
 
@@ -129,8 +129,9 @@ export const login = async (req, res) => {
             return res.status(400).json({ error: "Dominio de correo inválido" });
         }
 
-        // 2. El nombre del tenant viene del dominio (antes del ".com")
-        const nameTenant = domain.split('.')[0];
+        // 2. Obtener nombre del tenant desde el dominio (antes del ".com"), y reemplazar '-' por espacio
+        const rawTenant = domain.split('.')[0]; 
+        const nameTenant = rawTenant.replace(/-/g, ' '); 
 
         // 3. Buscar el tenant en la tabla de tenants
         const tenant = await TenantModel.findOne({ where: { name_tenant: nameTenant } });
