@@ -8,7 +8,6 @@ dotenv.config();
     host: process.env.DB_HOST,
     dialect: "mysql",
     logging: false,
-    timezone: "-05:00"
   });
 
   sequelize.authenticate()
