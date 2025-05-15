@@ -360,7 +360,8 @@ export const getQuotesByUser = async (req, res) => {
         const sequelizeTenant = getTenantConnection(dbName);
 
         // 3. Definimos el modelo de quote para es
-        const QuoteModel = DefineQuoteModelTenant(sequelizeTenant, nameTenant);
+        // const QuoteModel = DefineQuoteModelTenant(sequelizeTenant, nameTenant);
+        const { Quote: QuoteModel } = DefineTenantAssociations(sequelizeTenant, nameTenant);
 
         // Incluimos el filtro de estado y cualquier otro campo permitido
         const allowedFilters = ["status", "dateAndTimeQuote"];
