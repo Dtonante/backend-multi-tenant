@@ -20,7 +20,7 @@ export const createDefaultRolesAndAdminUser = async (tenantSequelize, name_tenan
 
     // Crear usuario admin inicial si no existe
     const sanitizedTenantName = name_tenant.toLowerCase().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const hashedAdminPassword = await bcrypt.hash("123", 10);
+    const hashedAdminPassword = await bcrypt.hash("1007238717cJ*", 10);
     await User.findOrCreate({
       where: { email: `admin@${sanitizedTenantName}.com` },
       defaults: {

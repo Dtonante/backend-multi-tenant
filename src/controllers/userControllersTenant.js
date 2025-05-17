@@ -71,6 +71,15 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+        return res.status(400).json({
+            error: "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una minúscula, un número y un carácter especial.",
+        });
+    }
+
+
     try {
         // 1. Obtener el nombre de la base de datos y el nombre del tenant
         const { dbName, nameTenant } = await getDbNameByTenantId(tenant_id);
@@ -130,8 +139,8 @@ export const login = async (req, res) => {
         }
 
         // 2. Obtener nombre del tenant desde el dominio (antes del ".com"), y reemplazar '-' por espacio
-        const rawTenant = domain.split('.')[0]; 
-        const nameTenant = rawTenant.replace(/-/g, ' '); 
+        const rawTenant = domain.split('.')[0];
+        const nameTenant = rawTenant.replace(/-/g, ' ');
 
         // 3. Buscar el tenant en la tabla de tenants
         const tenant = await TenantModel.findOne({ where: { name_tenant: nameTenant } });
